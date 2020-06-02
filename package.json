@@ -1,0 +1,32 @@
+{
+  "name": "@webergency/ecommerce",
+  "description": "Ecommerce Service",
+  "version": "0.0.1",
+  "author": "radixxko",
+  "license": "MIT",
+  "main": "lib/ecommerce.js",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "test": "nyc mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/webergency/ecommerce.git"
+  },
+  "keywords": [
+    "ecommerce",
+    "webergency"
+  ],
+  "dependencies": {
+    "@liqd-js/client": "0.0.2"
+  },
+  "devDependencies": {
+    "@liqd-js/server": "0.0.2",
+    "coveralls": "^3.0.5",
+    "mocha": "^5.0.4",
+    "nyc": "^14.1.1"
+  }
+}
