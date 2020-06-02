@@ -27,17 +27,147 @@ it( 'should create product handle', done =>
     { locale: 'sk' })
 });
 
+function randomIDs( id, count )
+{
+    let ids = [];
+
+    for( let start = Math.floor( ( id - 1 ) / count ) * count + 1, i = start; i < start + count; ++i )
+    {
+        ids.push( i );
+    }
+
+    return ids;
+}
+
+function parameters( id, labelCount, valueCount )
+{
+    let parameters = {};
+
+    for( let i = 0; i < labelCount; ++i )
+    {
+        parameters[ i + id ] = [...Array(valueCount).keys()].map( x => x + id )
+    }
+
+    return parameters;
+}
+
+function images( id, count, locale )
+{
+    let images = [];
+
+    for( let i = 0; i < count; ++i )
+    {
+        images.push(
+        {
+            id      : ( id * i ),
+            url     : 'https://cdn.hk-green.'+locale+'/_'+id+'-'+( id * i )+'.jpg', //SPARSOVANA NA TVOJE CDN
+            width   : id * 15,
+            height  : id * 10,
+            count   : i,
+            caption : locale + ' image caption ' + ( id * i )
+        })
+    }
+
+    return images;
+}
+
 it( 'should fetch product list data', async() =>
 {
-    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080', locale: 'sk' });
+    let locale = 'sk';
 
-    for( let id = 1; id < 100; ++i )
+    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080', locale });
+
+    for( let id = 1; id < 100; ++id )
     {
         let product = shop.product( id );
         let product_data = await product.data( 'list' );
 
         assert.equal( product_data.id, id );
-        assert.equal( product_data.name, name );
+        assert.equal( product_data.name, ( locale + ' Product ' + id ) );
+        assert.deepStrictEqual( product_data.group, { id: id * 10000, name: 'Product group ' + id } );
+        assert.deepStrictEqual( product_data.variants, randomIDs( id, 10 ) );
+        assert.deepStrictEqual( product_data.price,
+        {
+            current : id * 2.20,
+            average : id * 3,
+            discount: id / 10,
+            min     : parseFloat(( id * 1000 ).toFixed(2)),
+            max     : parseFloat(( id * 5000 ).toFixed(2))
+        });
+        assert.deepStrictEqual( product_data.images, images( id, 10, locale ) );
+        assert.deepStrictEqual( product_data.parameters, parameters( id, 5, 10 ) );
+        assert.deepStrictEqual( product_data.tags, randomIDs( id, 5 ) );
+
+        //console.log(product_data)
+    }
+
+    await server.destroy();
+});
+
+it( 'should fetch product detail data', async() =>
+{
+    let locale = 'sk';
+
+    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080', locale });
+
+    for( let id = 1; id < 100; ++id )
+    {
+        let product = shop.product( id );
+        let product_data = await product.data( 'detail' );
+
+        assert.equal( product_data.description, locale + ' Description of the product ' + id );
+        assert.deepStrictEqual( product_data.seo,
+        {
+            title       : locale + ' Seo title of the product ' + id,
+            description : locale + ' Seo description of the product ' + id
+        });
+        assert.deepStrictEqual( product_data.identifiers,
+        {
+            gtin8   : 'gtin8 ' + id,
+            gtin13  : 'gtin13 ' + id,
+            gtin14  : 'gtin14 ' + id,
+            mpn     : 'mpn ' + id,
+            isbn    : 'isbn ' + id
+        });
+        assert.deepStrictEqual( product_data.shipping,
+        {
+            width   : id * 2,
+            height  : id * 3,
+            depth   : id * 4,
+            weight  : id * 5
+        });
+        assert.equal( product_data.brand, 'Brand ' + id );
+        assert.deepStrictEqual( product_data.availability,
+        {
+            status  : '',
+            min     : id,
+            max     : id * 2,
+            step    : 1,
+            stock   : id * 2
+        });
+        assert.deepStrictEqual( product_data.timings, { dispatch: 7, delivery: 2 });
+        assert.deepStrictEqual( product_data.rating,
+        {
+            value   : 4.9,
+            count   : 300,
+            max     : 5,
+            reviews:
+            [
+                {
+                    author:
+                        {
+                            name: ''
+                        },
+                    rating  : 1,
+                    body    : ''
+                }
+            ]
+        });
+        assert.deepStrictEqual( product_data.galleries, [ { uid : 'main', images : images( id, 10, locale )}]);
+        assert.deepStrictEqual( product_data.related, randomIDs( id, 5 ));
+
+
+        //console.log(product_data)
     }
 
     await server.destroy();
