@@ -12,8 +12,8 @@ describe( 'Tests', ( done ) =>
 
 	for( let file of files )
 	{
-		if( !file.match(/\.js$/)/** / || ![ 'callbacks.js', 'freeze.js', 'nonexisting.js' ].includes( file )/**/ ){ continue; }
-		//if( !file.match(/\.js$/)/**/ || ![ 'products.js', 'carts.js', 'sessions.js' ].includes( file )/**/ ){ continue; }
+		//if( !file.match(/\.js$/)/** / || ![ 'callbacks.js', 'freeze.js', 'nonexisting.js' ].includes( file )/**/ ){ continue; }
+		if( !file.match(/\.js$/)/**/ || ![ 'products.js' ].includes( file )/**/ ){ continue; }
 
 		describe( file, () =>
 		{

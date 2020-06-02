@@ -1,8 +1,8 @@
 const Server = require('@liqd-js/server');
 
-function ProductFactory( uid )
+function ProductFactory( id, locale )
 {
-    let id = parseInt( uid );
+    id = parseInt( id );
 
     return (
     {
@@ -37,7 +37,9 @@ module.exports = class MockServer
 
         server.get( '/product', ( req, res, next ) =>
         {
-            res.reply( ProductFactory( req.query.uid ));
+            let product = ProductFactory( req.query.id );
+
+            res.reply({ id: product.id });
         });
 
         server.get( '/products/similar', ( req, res, next ) =>
