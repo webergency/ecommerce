@@ -8,16 +8,16 @@ it( 'should create cart handle', async() =>
 {
     let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080' });
 
-    let uid = 1, cart = shop.session( uid ).cart;
+    let id = 1, cart = shop.session( id ).cart;
 
     assert.equal( cart.constructor.name, 'Cart' );
-    assert.equal( cart.uid, uid );
-    assert.equal( cart, shop.session( uid ).cart );
+    assert.equal( cart.id, id );
+    assert.equal( cart, shop.session( id ).cart );
 
     let products = cart.products;
 
     assert.equal( products.constructor.name, 'CartProducts' );
-    assert.equal( products.uid, uid );
+    assert.equal( products.id, id );
     
     await server.destroy();
 });
@@ -26,7 +26,7 @@ it( 'should set cart products', async() =>
 {
     let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080' });
 
-    let uid = 1, products = shop.session( uid ).cart.products, list;
+    let id = 1, products = shop.session( id ).cart.products, list;
 
     list = await products.list();
 
@@ -37,14 +37,14 @@ it( 'should set cart products', async() =>
 
     assert.equal( list.length, 1 );
     assert.equal( list[0].product.constructor.name, 'Product' );
-    assert.equal( list[0].product.uid, 1 );
+    assert.equal( list[0].product.id, 1 );
     assert.equal( list[0].quantity, 2 );
 
     await products.set( 1, 3 );
     list = await products.list();
 
     assert.equal( list.length, 1 );
-    assert.equal( list[0].product.uid, 1 );
+    assert.equal( list[0].product.id, 1 );
     assert.equal( list[0].quantity, 3 );
 
     await products.set( 2, 5 );
@@ -66,7 +66,72 @@ it( 'should set cart products', async() =>
     list = await products.list();
 
     assert.equal( list.length, 0 );
-    assert.equal( list, await shop.session( uid ).cart.products.list() );    
+    assert.equal( list, await shop.session( id ).cart.products.list() );    
+
+    await server.destroy();
+});
+
+it( 'should set cart products by adding/removing quantity', async() =>
+{
+    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080' });
+
+    let id = 1, products = shop.session( id ).cart.products, list;
+
+    list = await products.list();
+
+    assert.equal( list.length, 0 );
+
+    await products.set( 1, '+2' );
+    list = await products.list();
+
+    assert.equal( list.length, 1 );
+    assert.equal( list[0].quantity, 2 );
+
+    await products.set( 1, '+3' );
+    list = await products.list();
+
+    assert.equal( list.length, 1 );
+    assert.equal( list[0].quantity, 5 );
+
+    await products.set( 1, '-1' );
+    list = await products.list();
+
+    assert.equal( list.length, 1 );
+    assert.equal( list[0].quantity, 4 );
+
+    await products.set( 1, '-5' );
+    list = await products.list();
+
+    assert.equal( list.length, 0 );
+
+    await products.set( 2, '-5' );
+    list = await products.list();
+
+    assert.equal( list.length, 0 );
+
+    await products.set( 2, '5' );
+    list = await products.list();
+
+    assert.equal( list.length, 1 );
+    assert.equal( list[0].quantity, 5 );
+
+    await products.set( 2, '+1' );
+    list = await products.list();
+
+    assert.equal( list.length, 1 );
+    assert.equal( list[0].quantity, 6 );
+
+    await products.set( 2, '3' );
+    list = await products.list();
+
+    assert.equal( list.length, 1 );
+    assert.equal( list[0].quantity, 3 );
+
+    await products.clear();
+    list = await products.list();
+
+    assert.equal( list.length, 0 );
+    assert.equal( list, await shop.session( id ).cart.products.list() );    
 
     await server.destroy();
 });

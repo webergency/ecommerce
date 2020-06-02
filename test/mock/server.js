@@ -35,6 +35,13 @@ module.exports = class MockServer
     {
         const server = this.#server = new Server();
 
+        /*server.use(( req, res, next ) =>
+        {
+            console.log( req.path );
+
+            next();
+        });*/
+
         server.get( '/product', ( req, res, next ) =>
         {
             let product = ProductFactory( req.query.id );
@@ -52,6 +59,15 @@ module.exports = class MockServer
             }
 
             res.reply( similar );
+        });
+
+        server.put( '/session/:id/cart/products', async( req, res, next ) =>
+        {
+            let body = await req.body;
+
+            console.log( req.params, body );
+
+            res.reply( 'ok' );
         });
 
         server.listen( port );

@@ -8,10 +8,10 @@ it( 'should create user handle', async() =>
 {
     let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080' });
 
-    let uid = 1, user = shop.session( uid ).user;
+    let id = 1, user = shop.session( id ).user;
 
     assert.equal( user.constructor.name, 'User' );
-    assert.equal( user, shop.session( uid ).user );
+    assert.equal( user, shop.session( id ).user );
 
     await server.destroy();
 });

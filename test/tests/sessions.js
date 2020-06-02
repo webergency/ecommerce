@@ -8,11 +8,11 @@ it( 'should create session handle', async() =>
 {
     let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080' });
 
-    let uid = 1, session = shop.session( uid );
+    let id = 1, session = shop.session( id );
 
     assert.equal( session.constructor.name, 'Session' );
-    assert.equal( session.uid, uid );
-    assert.equal( session, shop.session( uid ));
+    assert.equal( session.id, id );
+    assert.equal( session, shop.session( id ));
 
     await server.destroy();
 });
