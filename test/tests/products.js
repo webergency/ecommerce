@@ -41,21 +41,45 @@ it( 'should fetch product list data', async() =>
 
         assert.equal( product_data.id, id );
         assert.equal( product_data.name, ( locale + ' Product ' + id ) );
-        assert.deepStrictEqual( product_data.group, { id: id * 10000, name: 'Product group ' + id } );
-        assert.deepStrictEqual( product_data.variants, randomIDs( id, 10 ) );
         assert.deepStrictEqual( product_data.price,
         {
             current : id * 2.20,
             average : id * 3,
-            discount: id / 10,
-            min     : parseFloat(( id * 1000 ).toFixed(2)),
-            max     : parseFloat(( id * 5000 ).toFixed(2))
+            discount: id / 10
         });
         assert.deepStrictEqual( product_data.images, images( id, 10, locale ) );
         assert.deepStrictEqual( product_data.parameters, parameters( id, 5, 10 ) );
         assert.deepStrictEqual( product_data.tags, randomIDs( id, 5 ) );
 
         //console.log(product_data)
+    }
+
+    await server.destroy();
+});
+
+it( 'should fetch product group data', async() =>
+{
+    let locale = 'sk';
+
+    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080', locale });
+
+    for( let id = 1; id < 100; ++id )
+    {
+        let product = shop.product( id );
+        let product_data = await product.data( 'group' );
+
+        assert.equal( product_data.id, id );
+        assert.deepStrictEqual( product_data.group,
+        {
+            id: id * 10000,
+            name: 'Product group ' + id,
+            variants: randomIDs( id, 10 ),
+            price:
+            {
+                min     : parseFloat(( id * 1000 ).toFixed(2)),
+                max     : parseFloat(( id * 5000 ).toFixed(2))
+            }
+        });
     }
 
     await server.destroy();

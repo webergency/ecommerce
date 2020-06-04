@@ -56,29 +56,40 @@ module.exports.ProductFactory = function ProductFactory( id, locale, type = 'lis
         {
             id,
             name: locale + ' Product ' + id, // SINGLE PRODUCT NAME
-            group:
-            {
-                id     : id * 10000,
-                name   : 'Product group ' + id // NAME FOR GROUP( split zo seckych a spolocne stringy )
-            },
-            variants: randomIDs( id, 10 ), //GROPU PRODUCTS
             price:
             {
                 current : id * 2.20,
                 average : id * 3,
-                discount: id / 10,
-                min     : parseFloat(( id * 1000 ).toFixed(2)),
-                max     : parseFloat(( id * 5000 ).toFixed(2))
+                discount: id / 10
             },
             images: images( id, 10, locale ),
             parameters: parameters( id, 5, 10 ),
             tags: randomIDs( id, 5 )
         });
     }
+    else if( type === 'group' )
+    {
+        return (
+        {
+            id: id,
+            group:
+            {
+                id          : id * 10000,
+                name        : 'Product group ' + id, // NAME FOR GROUP( split zo seckych a spolocne stringy ),
+                variants    : randomIDs( id, 10 ), //GROPU PRODUCTS,
+                price       :
+                {
+                    min     : parseFloat(( id * 1000 ).toFixed(2)),
+                    max     : parseFloat(( id * 5000 ).toFixed(2))
+                }
+            }
+        });
+    }
     else
     {
         return (
         {
+            id: id,
             description: locale + ' Description of the product ' + id,
             seo:
             {
