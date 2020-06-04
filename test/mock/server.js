@@ -112,7 +112,7 @@ function ProductFactory( id, locale, type = 'list' )
                 dispatch: 7, //DISPATCHING TIME
                 delivery: 2 //DELIVERING TIME
             },
-            rating:
+            rating: //TODO POROB SERVIS
             {
                 value   : 4.9, //AVERAGE VALUE OF REVIEWS
                 count   : 300, //TOTAL COUNT OF REVIEWS
