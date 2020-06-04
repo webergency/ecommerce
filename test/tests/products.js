@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const MockServer = require('../mock/server');
+const { randomIDs, parameters, images } = require('../mock/factory/product');
 const Ecommerce = require('../../lib/ecommerce');
 
 it( 'should create product handle', done =>
@@ -26,50 +27,6 @@ it( 'should create product handle', done =>
     },
     { locale: 'sk' })
 });
-
-function randomIDs( id, count )
-{
-    let ids = [];
-
-    for( let start = Math.floor( ( id - 1 ) / count ) * count + 1, i = start; i < start + count; ++i )
-    {
-        ids.push( i );
-    }
-
-    return ids;
-}
-
-function parameters( id, labelCount, valueCount )
-{
-    let parameters = {};
-
-    for( let i = 0; i < labelCount; ++i )
-    {
-        parameters[ i + id ] = [...Array(valueCount).keys()].map( x => x + id )
-    }
-
-    return parameters;
-}
-
-function images( id, count, locale )
-{
-    let images = [];
-
-    for( let i = 0; i < count; ++i )
-    {
-        images.push(
-        {
-            id      : ( id * i ),
-            url     : 'https://cdn.hk-green.'+locale+'/_'+id+'-'+( id * i )+'.jpg', //SPARSOVANA NA TVOJE CDN
-            width   : id * 15,
-            height  : id * 10,
-            count   : i,
-            caption : locale + ' image caption ' + ( id * i )
-        })
-    }
-
-    return images;
-}
 
 it( 'should fetch product list data', async() =>
 {
