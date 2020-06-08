@@ -1,13 +1,26 @@
-module.exports.ParameterFactory = function ParameterFactory( uid )
+module.exports.ParameterFactory = function ParameterFactory( id, locale, type = 'parameter' )
 {
-    let id = parseInt( uid );
+    id = parseInt( id );
 
-    return (
+    if( type === 'parameter' )
     {
-        id,
-        label: 'Parameter ' + id,
-        type: '',
-        description: 'Description of the product ' + id,
-        price: parseFloat(( Math.random() * 1000 ).toFixed(2))
-    });
+        return (
+        {
+            id,
+            type     : 'Type ' + id,
+            priority : 1,
+            sequence : 1,
+            label    : locale + ' Parameter ' + id
+        });
+    }
+    else
+    {
+        return (
+        {
+            id,
+            parameterID : 1 + id,
+            sequence    : 1,
+            value       :  locale + ' ParameterValue ' + id
+        });
+    }
 }

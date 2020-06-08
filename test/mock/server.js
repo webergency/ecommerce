@@ -59,6 +59,20 @@ module.exports = class MockServer
             res.reply( similar );
         });
 
+        server.get( '/parameter', ( req, res, next ) =>
+        {
+            let parameter = ParameterFactory( req.query.id, req.query.locale );
+
+            res.reply( parameter );
+        });
+
+        server.get( '/parameter/values', ( req, res, next ) =>
+        {
+            let parameter = ParameterFactory( req.query.id, req.query.locale, 'parameterValue' );
+
+            res.reply( parameter );
+        });
+
         server.put( '/session/:id/cart/products', async( req, res, next ) =>
         {
             let body = await req.body;
