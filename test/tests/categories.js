@@ -8,11 +8,18 @@ it( 'should create Category handle', async() =>
 {
     let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080' });
 
-    let uid = 1, category = shop.category( uid );
+    let id = 1, category = shop.category( id );
 
     assert.equal( category.constructor.name, 'Category' );
-    assert.equal( category.uid, uid );
-    assert.equal( category, shop.category( uid ) );
+    assert.equal( category.id, id );
+    assert.equal( category, shop.category( id ) );
+
+    console.log( await category.products() );
+
+    for( let product of await category.products() )
+    {
+        console.log(( await product.data('list')).name );
+    }
 
     await server.destroy();
 });

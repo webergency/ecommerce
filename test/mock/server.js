@@ -18,6 +18,28 @@ module.exports = class MockServer
             next();
         });*/
 
+        server.get( '/category/:id/products', ( req, res, next ) =>
+        {
+            res.reply([ 1, 2, 3, 4, 5 ]);
+        });
+
+        server.get( '/category/:id/filter', ( req, res, next ) =>
+        {
+            res.reply(
+            {
+                parameters: 
+                [
+                    { parameter: 1, values: [ 1, 2, 3 ]},
+                    { parameter: 1, values: [ 1, 2, 3 ]}
+                ],
+                price:
+                {
+                    min: 10,
+                    max: 200
+                }
+            });
+        });
+
         server.get( '/product', ( req, res, next ) =>
         {
             let product = ProductFactory( req.query.id, req.query.locale, req.query.scope );

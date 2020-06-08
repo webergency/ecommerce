@@ -13,7 +13,7 @@ describe( 'Tests', ( done ) =>
 	for( let file of files )
 	{
 		//if( !file.match(/\.js$/)/** / || ![ 'callbacks.js', 'freeze.js', 'nonexisting.js' ].includes( file )/**/ ){ continue; }
-		if( !file.match(/\.js$/)/**/ || ![ 'sessions.js', 'carts.js', 'users.js', 'products.js' ].includes( file )/**/ ){ continue; }
+		if( !file.match(/\.js$/)/**/ || ![ /*'sessions.js', 'carts.js', 'users.js', 'products.js',*/ 'categories.js' ].includes( file )/**/ ){ continue; }
 
 		describe( file, () =>
 		{

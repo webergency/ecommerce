@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "@liqd-js/client": "0.0.2",
-    "@liqd-js/flow": "^1.3.0"
+    "@liqd-js/flow": "^1.4.0"
   },
   "devDependencies": {
     "@liqd-js/server": "0.0.2",
