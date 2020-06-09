@@ -20,7 +20,12 @@ module.exports = class MockServer
 
         server.get( '/category/:id/products', ( req, res, next ) =>
         {
-            res.reply([ 1, 2, 3, 4, 5 ]);
+            res.reply(
+            {
+                count: 10,
+                page: 1,
+                list: [ 1, 2, 3, 4, 5 ]
+            });
         });
 
         server.get( '/category/:id/filter', ( req, res, next ) =>

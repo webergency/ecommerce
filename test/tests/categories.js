@@ -6,7 +6,7 @@ const Ecommerce = require('../../lib/ecommerce');
 
 it( 'should create Category handle', async() =>
 {
-    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080' });
+    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8081' });
 
     let id = 1, category = shop.category( id );
 
