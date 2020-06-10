@@ -40,6 +40,15 @@ it( 'should create Category handle', async() =>
     {
         console.log( sibling.name, sibling.url );
     }
+
+    let products = await category.products();
+
+    console.log({ products });
+
+    for( let product of products.list )
+    {
+        console.log( product.name, product.url, product.price );
+    }
     //console.log( await category.children() );
 
     /*
