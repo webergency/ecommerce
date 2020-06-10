@@ -69,4 +69,5 @@ it( 'should create Category handle', async() =>
     }*/
 
     await server.destroy();
-});
+})
+.timeout( 30000 );
