@@ -12,7 +12,7 @@ it( 'should create Category handle', async() =>
 
     console.log( category );
     console.log( category.name );
-    console.log( category.url );
+    console.log( category.url );/*
 
     let children = await category.children();
 
@@ -48,7 +48,11 @@ it( 'should create Category handle', async() =>
     for( let product of products.list )
     {
         console.log( product.name, product.url, product.price );
-    }
+    }*/
+
+    let filter = await category.filter();
+
+    console.log({ filter });
     //console.log( await category.children() );
 
     /*
