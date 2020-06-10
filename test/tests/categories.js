@@ -31,6 +31,15 @@ it( 'should create Category handle', async() =>
     {
         console.log( node.name, node.url );
     }
+
+    let siblings = await category.siblings();
+
+    console.log({ siblings });
+
+    for( let sibling of siblings )
+    {
+        console.log( sibling.name, sibling.url );
+    }
     //console.log( await category.children() );
 
     /*
