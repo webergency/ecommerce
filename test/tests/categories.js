@@ -12,7 +12,11 @@ it( 'should create Category handle', async() =>
 
     console.log( category );
     console.log( category.name );
-    console.log( category.url );/*
+    console.log( category.url );
+    
+    let product = await shop.product( 10, 'detail' );
+    
+    /*
 
     let children = await category.children();
 
