@@ -22,7 +22,7 @@
   ],
   "dependencies": {
     "@liqd-js/alg-object-merge": "^1.0.0",
-    "@liqd-js/client": "0.0.2",
+    "@liqd-js/client": "0.0.3",
     "@liqd-js/flow": "^1.4.0",
     "liqd-string": "^1.0.5"
   },
