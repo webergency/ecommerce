@@ -8,10 +8,6 @@ it( 'should create Category handle', async() =>
 {
     let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8081', locale: 'sk', country: 'sk' });
 
-    console.log( 'TU', await shop.products.group( 1 ) );
-
-    console.log( 'TUTAJ' );
-
     /*
     let id = 12, category = await shop.category( id );
 
