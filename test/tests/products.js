@@ -1,32 +1,61 @@
 'use strict';
 
 const assert = require('assert');
-const MockServer = require('../mock/server');
-const { randomIDs, parameters, images } = require('../mock/factory/product');
 const Ecommerce = require('../../lib/ecommerce');
 
-it( 'should create product handle', done =>
-{
-    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080', locale: 'cz' });
+const ID = () => Math.ceil( Math.random() * 100000 );
 
-    shop.flow.start( async() =>
+it( 'should create Product handle', async() =>
+{
+    let shop = new Ecommerce({ webroot: 'http://localhost:8081', locale: 'sk' });
+
+    for( let i = 0; i <= 20; ++i )
     {
-        let id = 1, product = shop.product( id );
+        let id = ID(), product = await shop.product( id );
 
         assert.equal( product.constructor.name, 'Product' );
         assert.equal( product.id, id );
-        assert.equal( product, shop.product( id ));
+        assert.equal( product, await shop.product( id ));
+    }
+})
+.timeout( 5000 );
 
-        let product_data = await product.data();
+it( 'should fetch Product list data', async() =>
+{
+    let shop = new Ecommerce({ webroot: 'http://localhost:8081', locale: 'sk', country: 'SK' });
 
-        assert.equal( product_data.id, id );
+    for( let i = 0; i <= 10; ++i )
+    {
+        let id = ID(), product = await shop.product( id, 'list' );
 
-        await server.destroy();
+        assert.strictEqual( product.name, `Produkt ${id} zo skupiny ${Math.floor((id-1)/10)+1}` );
+        
+        assert.ok( typeof product.price.current === 'number' && product.price.current > 0 );
+        assert.ok( Array.isArray( product.images ));
 
-        done();
-    },
-    { locale: 'sk' })
-});
+        console.log( product.parameters );
+
+
+        /*
+        name        : { [locale]: product.name },
+                    price       : { [country]: product.price },
+                    images      : await Promise.all( product.images.map( id => Image.get( this.#ctx, id ))),
+                    parameters  : product.parameters,
+                    tags        : product.tags,
+                    shipping    : product.shipping,
+                    availability: { [country]: product.availability },
+                    timings     : { [country]: product.timings }
+        /*assert.strictEqual( category.description, `Popisok kategórie ${id}` );
+        assert.strictEqual( category.title, `Titulok kategórie ${id}` );
+        assert.strictEqual( category.url, `/kategoria-${id}-c${id}` );
+        assert.strictEqual( category.subcategories, id.toString().length === 3 ? 0 : 9 );*/
+    }
+})
+.timeout( 15000 );
+
+
+
+/*
 
 it( 'should fetch product list data', async() =>
 {
@@ -181,3 +210,4 @@ it( 'should fetch similar products', async() =>
 
     await server.destroy();
 });
+*/

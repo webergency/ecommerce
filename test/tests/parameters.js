@@ -1,71 +1,71 @@
 'use strict';
 
 const assert = require('assert');
-const MockServer = require('../mock/server');
-const { randomIDs, parameters, images } = require('../mock/factory/product');
 const Ecommerce = require('../../lib/ecommerce');
 
-it( 'should create parameter handle', done =>
+it( 'should create parameter handle', async() =>
 {
-    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080', locale: 'cz' });
+    let shop = new Ecommerce({ webroot: 'http://localhost:8081', locale: 'sk', country: 'SK' });
+
+    let id = 1, parameter = await shop.parameter( id );
+
+    assert.strictEqual( parameter.constructor.name, 'Parameter' );
+    assert.strictEqual( parameter.id, id );
+});
+
+it( 'should fetch parameter data', async() =>
+{
+    let shop = new Ecommerce({ webroot: 'http://localhost:8081', locale: 'sk', country: 'SK' });
+
+    let id = 1, parameter = await shop.parameter( id );
+
+    assert.strictEqual( parameter.type,       'range' );
+    assert.strictEqual( parameter.priority,   10 );
+    assert.strictEqual( parameter.sequence,   1 );
+    assert.strictEqual( parameter.unit,       'cm' );
+    assert.strictEqual( parameter.unitCode,   'CMT' );
+    assert.strictEqual( parameter.label,      'Výška' );
+    assert.deepStrictEqual( parameter.values,     []);
+});
+
+it( 'should fetch parameter values', async() =>
+{
+    let shop = new Ecommerce({ webroot: 'http://localhost:8081', locale: 'sk', country: 'SK' });
+
+    let id = 1, parameter = await shop.parameter( id, [ 1, 2, 3, 4, 5 ]), i = 0;
+
+    let parameter2 = await shop.parameter( id, [ 1, 2, 3, 4, 5 ]);
+
+    for( let parameter_value of parameter.values )
+    {
+        assert.strictEqual( parameter_value.parameterID,  id );
+        assert.strictEqual( parameter_value.sequence,     i + 1 );
+        assert.strictEqual( parameter_value.label,        ( 100 + i * 20 ).toString() );
+
+        assert.strictEqual( parameter_value, parameter2.values[i++] );
+    }
+});
+
+it( 'should fetch parameter in current locale', ( done ) =>
+{
+    let shop = new Ecommerce({ webroot: 'http://localhost:8081', locale: 'sk', country: 'SK' });
 
     shop.flow.start( async() =>
+    {
+        let id = 2, parameter = await shop.parameter( id, [ 8 ]);
+
+        assert.strictEqual( parameter.label,              'Farba' );
+        assert.strictEqual( parameter.values[0].label,    'červená' );
+
+        shop.flow.start( async() =>
         {
-            let id = 1, parameter = shop.parameter( id );
+            let id = 2, parameter = await shop.parameter( id, [ 8 ]);
 
-            assert.equal( parameter.constructor.name, 'Parameter' );
-            assert.equal( parameter.id, id );
-            assert.equal( parameter, shop.parameter( id ));
-
-            let parameter_data = await parameter.data();
-
-            assert.equal( parameter_data.id, id );
-
-            await server.destroy();
+            assert.strictEqual( parameter.label,              'Barva' );
+            assert.strictEqual( parameter.values[0].label,    'rudá' );
 
             done();
         },
-        { locale: 'sk' })
+        { locale: 'cs', country: 'CZ' });
+    });
 });
-
-it( 'should fetch parameter random data', async() =>
-{
-    let locale = 'sk';
-
-    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080', locale });
-
-    for( let id = 1; id < 100; ++id )
-    {
-        let parameter = shop.parameter( id );
-        let parameter_data = await parameter.data();
-
-        assert.equal( parameter_data.id, id );
-        assert.equal( parameter_data.label, ( locale + ' Parameter ' + id ) );
-        assert.equal( parameter_data.type, 'Type ' + id );
-        assert.equal( parameter_data.priority, 1 );
-        assert.equal( parameter_data.sequence, 1 );
-    }
-
-    await server.destroy();
-});
-
-it( 'should fetch parameterValue random data', async() =>
-{
-    let locale = 'sk';
-
-    let server = new MockServer( 8080 ), shop = new Ecommerce({ webroot: 'http://localhost:8080', locale });
-
-    for( let id = 1; id < 100; ++id )
-    {
-        let parameter = shop.parameter( id );
-        let parameterValue_data = await parameter.values();
-
-        assert.equal( parameterValue_data.id, id );
-        assert.equal( parameterValue_data.parameterID, 1 + id );
-        assert.equal( parameterValue_data.sequence, 1 );
-        assert.equal( parameterValue_data.value, ( locale + ' ParameterValue ' + id ) );
-    }
-
-    await server.destroy();
-});
-
