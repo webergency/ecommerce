@@ -23,15 +23,17 @@
   "dependencies": {
     "@liqd-js/alg-object-merge": "^1.0.0",
     "@liqd-js/client": "0.0.3",
+    "@liqd-js/clone": "^1.0.0",
     "@liqd-js/flow": "^1.4.0",
     "@liqd-js/handle": "^1.0.0",
+    "@liqd-js/multivalue": "^0.0.3",
     "@liqd-js/observable": "0.0.1",
     "liqd-string": "^1.0.5"
   },
   "devDependencies": {
     "@liqd-js/server": "0.0.2",
     "coveralls": "^3.0.5",
-    "mocha": "^5.0.4",
+    "mocha": "^8.3.2",
     "nyc": "^14.1.1"
   }
 }
