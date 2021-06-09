@@ -1,7 +1,7 @@
 {
   "name": "@webergency/ecommerce",
   "description": "Ecommerce Service",
-  "version": "0.0.1",
+  "version": "1.0.2",
   "author": "radixxko",
   "license": "MIT",
   "main": "lib/ecommerce.js",
@@ -21,12 +21,13 @@
     "webergency"
   ],
   "dependencies": {
-    "@liqd-js/alg-object-merge": "^1.0.0",
+    "@liqd-js/alg-object-merge": "^1.0.1",
     "@liqd-js/client": "0.0.3",
     "@liqd-js/clone": "^1.0.0",
     "@liqd-js/flow": "^1.4.0",
     "@liqd-js/handle": "^1.0.0",
     "@liqd-js/multivalue": "^0.0.3",
+    "@liqd-js/normalize": "^0.9.8",
     "@liqd-js/observable": "0.0.1",
     "liqd-string": "^1.0.5"
   },
