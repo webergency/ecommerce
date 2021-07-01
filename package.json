@@ -28,7 +28,7 @@
     "@liqd-js/handle": "^1.0.0",
     "@liqd-js/multivalue": "^0.0.3",
     "@liqd-js/normalize": "^0.9.8",
-    "@liqd-js/observable": "^0.1.0",
+    "@liqd-js/observable": "^0.1.1",
     "liqd-string": "^1.0.5"
   },
   "devDependencies": {
