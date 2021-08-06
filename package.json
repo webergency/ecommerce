@@ -27,7 +27,7 @@
     "@liqd-js/flow": "^1.4.0",
     "@liqd-js/handle": "^1.0.0",
     "@liqd-js/multivalue": "^0.0.3",
-    "@liqd-js/normalize": "^0.9.9",
+    "@liqd-js/normalize": "^1.0.0",
     "@liqd-js/observable": "^0.1.1"
   },
   "devDependencies": {
